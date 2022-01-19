@@ -49,6 +49,14 @@ class User{
             throw Error(err);
         }
     }
+
+    async delete(id){
+        try {
+            return await knexBuilder.delete().where({id:id}).table('users');
+        } catch (err) {
+            throw Error(err);
+        }
+    }
 }
 
 module.exports = new User();

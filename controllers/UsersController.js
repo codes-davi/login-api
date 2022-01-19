@@ -59,18 +59,31 @@ class UsersController{
                 } else if (email != user.email) {
                     editUser.email = email;
                 }
-            }
-            
+            }     
             if (role) editUser.role = role;
             
             await User.update(editUser);
-
             return res.sendStatus(200);
         } catch (err) {
             console.log(err);
             return res.sendStatus(500);
         }
+    }
+
+    async delete(req,res){
+        let {id} = req.params;
         
+        if(!id) return res.sendStatus(400);
+        try {
+            let rows = await User.delete(id);
+            if (rows>0) {
+                return res.sendStatus(200);
+            } else {
+                return res.sendStatus(404);
+            }
+        } catch (err) {
+            return res.sendStatus(500);
+        }
     }
 }
 
