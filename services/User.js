@@ -41,6 +41,14 @@ class User{
             throw Error(err);
         }
     }
+
+    async update(user){ 
+        try {
+            await knexBuilder.update(user).where({id: user.id}).table('users');
+        } catch (err) {
+            throw Error(err);
+        }
+    }
 }
 
 module.exports = new User();
