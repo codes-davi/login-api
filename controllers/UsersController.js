@@ -1,5 +1,8 @@
 const User = require('../services/User');
 const Recovery = require('../services/Recovery');
+const jwt = require('jsonwebtoken');
+const {secret} = require('../token-config/token-config');
+const bcrypt = require('bcrypt');
 
 class UsersController{
     
@@ -113,6 +116,21 @@ class UsersController{
         } catch (err) {
             return res.sendStatus(500);
         }
+    }
+
+    async login (req, res){
+        let {email, password} = req.body;
+        let user = await User.findByEmail(email);
+        
+        if(!user) return res.sendStatus(404);
+
+        let result = await bcrypt.compare(password, user.password);
+
+        if (!result) return res.sendStatus(401);
+        else req.loggedUser = {email: email, role: user.role};
+        let token = await jwt.sign({email: email, role: user.role}, secret);
+        return res.status(200).json(token);
+        
     }
 }
 
