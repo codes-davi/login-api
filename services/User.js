@@ -1,5 +1,6 @@
 const knexBuilder  = require('../dbconfig/connection');
 const bcrypt = require('bcrypt');
+const Recovery  = require('./Recovery');
 
 class User{
 
@@ -42,6 +43,16 @@ class User{
         }
     }
 
+    async findByEmail(email){
+        try {
+            let result = await knexBuilder.select(['id', 'name', 'email','role']).where({email: email}).table('users');
+            if (result.length > 0) return result[0];
+            else return undefined;
+        } catch (err) {
+            throw Error(err);
+        }
+    }
+
     async update(user){ 
         try {
             await knexBuilder.update(user).where({id: user.id}).table('users');
@@ -56,6 +67,16 @@ class User{
         } catch (err) {
             throw Error(err);
         }
+    }
+
+    async changePassword(password, id, token){
+        try {
+            let hash = await bcrypt.hash(password.toString(), 10);
+            await knexBuilder.update({password:hash}).where({id:id}).table('users');
+            await Recovery.setUsed(token);
+        } catch (err) {
+            throw Error(err);
+        }  
     }
 }
 

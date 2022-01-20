@@ -1,4 +1,5 @@
 const User = require('../services/User');
+const Recovery = require('../services/Recovery');
 
 class UsersController{
     
@@ -81,6 +82,34 @@ class UsersController{
             } else {
                 return res.sendStatus(404);
             }
+        } catch (err) {
+            return res.sendStatus(500);
+        }
+    }
+
+    async recoverPassword(req,res){
+        let {email} = req.body;
+        let result = await Recovery.create(email);
+        try {
+            if (result) {
+                return res.sendStatus(200);
+            }else{
+                return res.sendStatus(404);
+            }
+        } catch (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        }
+    }
+
+    async changePassword(req,res){
+        let {token, password} = req.body;
+        let validToken = await Recovery.validate(token);
+
+        if (!validToken.status) return res.sendStatus(403); 
+        try {
+            await User.changePassword(password, validToken.token[0].id, validToken.token[0].token);
+            return res.sendStatus(200);
         } catch (err) {
             return res.sendStatus(500);
         }
