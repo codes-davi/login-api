@@ -129,7 +129,7 @@ class UsersController{
         if (!result) return res.sendStatus(401);
         else req.loggedUser = {email: email, role: user.role};
         let token = await jwt.sign({email: email, role: user.role}, secret);
-        return res.status(200).json(token);
+        return res.status(200).json({token: token});
         
     }
 }
