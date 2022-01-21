@@ -3,6 +3,9 @@ const router = express.Router();
 const defaultController = require('../controllers/DefaultController');
 const usersController = require('../controllers/UsersController');
 const authHandler = require('../handlers/auth-handler');
+const cors = require('cors');
+
+router.use(cors());
 
 router.get('/', defaultController.index);
 router.post('/user', usersController.create);
