@@ -1,5 +1,5 @@
 # login-api
-Generic Login REST Api with Roles &amp; Password Recovery. 
+Login REST-Api with Roles &amp; Password Recovery. 
 
 Main stack: 
 ExpressJS, KnexJS(MySQL), JWT Authentication, User's Roles, Bcrypt.
