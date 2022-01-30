@@ -1,4 +1,4 @@
-# login-api
+# login-api 🔐
 Login REST-Api with Roles &amp; Password Recovery. 
 
 Main stack: 
